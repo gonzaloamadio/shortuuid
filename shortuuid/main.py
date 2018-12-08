@@ -5,6 +5,46 @@ import math
 import os
 import uuid as _uu
 
+SALT_STRINGS=[(1,'g'),(7,'o'),(9,'n')]
+
+def insert_char(mystring, index, chartoinsert):
+    if index > len(mystring):
+        return mystring
+    else:
+        mystring   =  mystring[:index] + chartoinsert + mystring[index:]
+        return mystring
+
+def remove_char(mystring,index):
+    if index > len(mystring):
+        return mystring
+    return mystring[:index] + mystring[index+1:]
+
+def salt_string(string):
+    """
+      Add some 'random' letters in 'random' positions, to add extra layer of security
+
+      Sort it ascending, so we do not alter the insert position for the unsalting
+    """
+    for tup in sorted(SALT_STRINGS, key=lambda x: x[0]):
+        string = insert_char(string,tup[0],tup[1])
+    return string
+
+def unsalt_string(string):
+    """
+      Remove some 'random' letters in 'random' positions, so when decoding, obtain original value
+
+      SALT_STRINGS is iterated descending order so we do not alter the length of the first
+      portion of the string when we delete characters.
+
+      Example:
+          s = "abcdefghi", if we want to take positions 1 and 7, that will be
+          characters 'b' and 'g', but if we take first 'b', then the 7th character
+          will be 'h'. But if we take first the 7th, the first portion will remain untouched
+          so still valid the relation between index and letter.
+    """
+    for tup in sorted(SALT_STRINGS, key=lambda x: x[0],reverse=True):
+        string = remove_char(string,tup[0])
+    return string
 
 def int_to_string(number, alphabet, padding=None):
     """
@@ -57,7 +97,8 @@ class ShortUUID(object):
         """
         if pad_length is None:
             pad_length = self._length
-        return int_to_string(uuid.int, self._alphabet, padding=pad_length)
+        #return int_to_string(uuid.int, self._alphabet, padding=pad_length)
+        return salt_string(int_to_string(uuid.int, self._alphabet, padding=pad_length))
 
     def decode(self, string, legacy=False):
         """
@@ -72,6 +113,7 @@ class ShortUUID(object):
         """
         if legacy:
             string = string[::-1]
+        string = unsalt_string(string)
         return _uu.UUID(int=string_to_int(string, self._alphabet))
 
     def uuid(self, name=None, pad_length=None):
@@ -136,3 +178,10 @@ uuid = _global_instance.uuid
 random = _global_instance.random
 get_alphabet = _global_instance.get_alphabet
 set_alphabet = _global_instance.set_alphabet
+
+s = ShortUUID()
+u = _uu.UUID('{00010203-0405-0607-0809-0a0b0c0d0e0f}')
+print('U:{}'.format(u))
+print(s.encode(u))
+print(encode(u))
+

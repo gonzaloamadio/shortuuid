@@ -18,12 +18,12 @@ class LegacyShortUUIDTest(unittest.TestCase):
         self.assertTrue(20 < len(uuid("example.com/")) < 24)
 
     def test_encoding(self):
-        u = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
-        self.assertEqual(encode(u), "CXc85b4rqinB7s5J52TRYb")
+        ui = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
+        self.assertEqual(encode(ui), "bYRT25J5s7Bniqr4b58cXC")
 
     def test_decoding(self):
-        u = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
-        self.assertEqual(decode("CXc85b4rqinB7s5J52TRYb"), u)
+        ui = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
+        self.assertEqual(decode("bYRT25J5s7Bniqr4b58cXC"), ui)
 
     def test_alphabet(self):
         backup_alphabet = get_alphabet()
@@ -38,11 +38,11 @@ class LegacyShortUUIDTest(unittest.TestCase):
         self.assertEqual(set(uuid()), set("01"))
         self.assertTrue(116 < len(uuid()) < 140)
 
-        u = uuid4()
-        self.assertEqual(u, decode(encode(u)))
+        ui = uuid4()
+        self.assertEqual(ui, decode(encode(ui)))
 
-        u = uuid()
-        self.assertEqual(u, encode(decode(u)))
+        ui = uuid()
+        self.assertEqual(ui, encode(decode(ui)))
 
         self.assertRaises(ValueError, set_alphabet, "1")
         self.assertRaises(ValueError, set_alphabet, "1111111")
@@ -67,13 +67,14 @@ class ClassShortUUIDTest(unittest.TestCase):
 
     def test_encoding(self):
         su = ShortUUID()
-        u = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
-        self.assertEqual(su.encode(u), "CXc85b4rqinB7s5J52TRYb")
+        ui = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
+        import pdb;pdb.set_trace()
+        self.assertEqual(su.encode(ui), "bYRT25J5s7Bniqr4b58cXC")
 
     def test_decoding(self):
         su = ShortUUID()
-        u = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
-        self.assertEqual(su.decode("CXc85b4rqinB7s5J52TRYb"), u)
+        ui = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
+        self.assertEqual(su.decode("bYRT25J5s7Bniqr4b58cXC"), ui)
 
     def test_random(self):
         su = ShortUUID()
@@ -97,11 +98,11 @@ class ClassShortUUIDTest(unittest.TestCase):
         self.assertTrue(116 < len(su1.uuid()) < 140)
         self.assertTrue(20 < len(su2.uuid()) < 24)
 
-        u = uuid4()
-        self.assertEqual(u, su1.decode(su1.encode(u)))
+        ui = uuid4()
+        self.assertEqual(ui, su1.decode(su1.encode(ui)))
 
-        u = su1.uuid()
-        self.assertEqual(u, su1.encode(su1.decode(u)))
+        ui = su1.uuid()
+        self.assertEqual(ui, su1.encode(su1.decode(ui)))
 
         self.assertRaises(ValueError, su1.set_alphabet, "1")
         self.assertRaises(ValueError, su1.set_alphabet, "1111111")
