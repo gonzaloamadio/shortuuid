@@ -68,8 +68,13 @@ class ClassShortUUIDTest(unittest.TestCase):
     def test_encoding(self):
         su = ShortUUID()
         ui = UUID("{3b1f8b40-222c-4a6e-b77e-779d5a94e21c}")
-        import pdb;pdb.set_trace()
         self.assertEqual(su.encode(ui), "bYRT25J5s7Bniqr4b58cXC")
+
+        ui = UUID("{00010203-0405-0607-0809-0a0b0c0d0e0f}")
+        self.assertEqual(su.encode(ui), "2g24Hj8otnHKmged8ChbfJanE")
+
+
+
 
     def test_decoding(self):
         su = ShortUUID()

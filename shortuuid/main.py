@@ -179,9 +179,12 @@ random = _global_instance.random
 get_alphabet = _global_instance.get_alphabet
 set_alphabet = _global_instance.set_alphabet
 
-s = ShortUUID()
-u = _uu.UUID('{00010203-0405-0607-0809-0a0b0c0d0e0f}')
-print('U:{}'.format(u))
-print(s.encode(u))
-print(encode(u))
+#s = ShortUUID()
+#u = _uu.UUID('{00010203-0405-0607-0809-0a0b0c0d0e0f}')
+#print('U:{}'.format(u))
+#print(s.encode(u))
+#print(encode(u))
+#>>> U:00010203-0405-0607-0809-0a0b0c0d0e0f
+#>>> 2g24Hj8otnHKmged8ChbfJanE
+#>>> 2g24Hj8otnHKmged8ChbfJanE
 
