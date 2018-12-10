@@ -70,16 +70,7 @@ class ShortUUID(object):
         """
         return int(math.ceil(math.log(2 ** 128, self._alpha_len)))
 
-    def encode_salt(self, uuid, pad_length=None):
-        """
-            Salt string
-        """
-        if pad_length is None:
-            pad_length = self._length
-        #return int_to_string(uuid.int, self._alphabet, padding=pad_length)
-        return salt_string(int_to_string(uuid.int, self._alphabet, padding=pad_length))
-
-    def encode(self, uuid, pad_length=None):
+    def _encode(self, uuid, pad_length=None):
         """
         Encode a UUID into a string (LSB first) according to the alphabet
 
@@ -88,15 +79,18 @@ class ShortUUID(object):
         if pad_length is None:
             pad_length = self._length
         #return int_to_string(uuid.int, self._alphabet, padding=pad_length)
-        return salt_string(int_to_string(uuid.int, self._alphabet, padding=pad_length))
+        return int_to_string(uuid.int, self._alphabet, padding=pad_length)
 
-    def decode_salted(self, string, legacy=False):
-        if legacy:
-            string = string[::-1]
-        string = unsalt_string(string)
-        return _uu.UUID(int=string_to_int(string, self._alphabet))
+    def encode(self, uuid, pad_length=None):
+        """
+            Salt string
+        """
+        if pad_length is None:
+            pad_length = self._length
+        #return int_to_string(uuid.int, self._alphabet, padding=pad_length)
+        return salt_string(self._encode(uuid))
 
-    def decode(self, string, legacy=False):
+    def _decode(self, string, legacy=False):
         """
         Decode a string according to the current alphabet into a UUID
         Raises ValueError when encountering illegal characters
@@ -110,6 +104,12 @@ class ShortUUID(object):
         if legacy:
             string = string[::-1]
         return _uu.UUID(int=string_to_int(string, self._alphabet))
+
+    def decode(self, string, legacy=False):
+        if legacy:
+            string = string[::-1]
+        string = unsalt_string(string)
+        return self._decode(string)
 
     def uuid(self, name=None, pad_length=None):
         """
@@ -177,15 +177,16 @@ set_alphabet = _global_instance.set_alphabet
 #s = ShortUUID()
 #u = _uu.UUID('{00010203-0405-0607-0809-0a0b0c0d0e0f}')
 #print('U:{}'.format(u))
-#e = s.encode(u)
-#es = s.encode_salt(u)
-#d = s.decode(e)
-#ds = s.decode_salted(es)
+#e = s._encode(u)
+#d = s._decode(e)
+#es = s.encode(u)
+#ds = s.decode(es)
 #print('e:{}'.format(e))
 #print('es:{}'.format(es))
 #print('d:{}'.format(d))
 #print('ds:{}'.format(ds))
 #print(ds==u)
+#print(d==u)
 #
 #U:00010203-0405-0607-0809-0a0b0c0d0e0f
 #e:339nX8gnDYeGc8jU4dpCfE
