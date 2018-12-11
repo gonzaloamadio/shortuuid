@@ -83,7 +83,7 @@ class ShortUUID(object):
 
     def encode(self, uuid, pad_length=None):
         """
-            Salt string
+            Encode and Salt string
         """
         if pad_length is None:
             pad_length = self._length
@@ -113,7 +113,7 @@ class ShortUUID(object):
 
     def uuid(self, name=None, pad_length=None):
         """
-        Generate and return a UUID.
+        Generate and return an encoded(and salted) UUID.
 
         If the name parameter is provided, set the namespace to the provided
         name and generate a UUID.
@@ -125,8 +125,10 @@ class ShortUUID(object):
         if name is None:
             uuid = _uu.uuid4()
         elif name.lower().startswith(("http://", "https://")):
+            # NAMESPACE_URL is a constant predefined in library
             uuid = _uu.uuid5(_uu.NAMESPACE_URL, name)
         else:
+            # NAMESPACE_DNS is a constant predefined in library
             uuid = _uu.uuid5(_uu.NAMESPACE_DNS, name)
         return self.encode(uuid, pad_length)
 
