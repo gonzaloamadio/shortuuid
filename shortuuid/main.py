@@ -191,8 +191,8 @@ set_alphabet = _global_instance.set_alphabet
 #print(d==u)
 #
 #U:00010203-0405-0607-0809-0a0b0c0d0e0f
-#e:339nX8gnDYeGc8jU4dpCfE
+#e:224Hj8tHKmged8ChbfJanE
 #es:339nX8gnDYeGc8jU4dpCfE
-#d:05bb8749-3edc-ace0-36ad-efd7b33cdeae
+#d:00010203-0405-0607-0809-0a0b0c0d0e0f
 #ds:00010203-0405-0607-0809-0a0b0c0d0e0f
 #True
